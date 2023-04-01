@@ -1,7 +1,10 @@
 package com.isep.acme.model;
 
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class AggregatedRating {
@@ -13,14 +16,10 @@ public class AggregatedRating {
     @Column()
     private double average;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
-    private Product product;
-
     protected AggregatedRating() {}
 
-    public AggregatedRating(double average, Product product) {
-        this.average = average;
-        this.product = product;
+    public AggregatedRating(double averaget) {
+        this.average = averaget;
     }
 
     public double getAverage() {
@@ -29,14 +28,6 @@ public class AggregatedRating {
 
     public void setAverage(double average) {
         this.average = average;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public Long getAggregatedId() {

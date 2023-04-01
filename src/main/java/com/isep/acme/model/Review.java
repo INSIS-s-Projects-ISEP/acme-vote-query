@@ -1,8 +1,22 @@
 package com.isep.acme.model;
 
-import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 @Entity
 public class Review {
@@ -38,10 +52,6 @@ public class Review {
     private String funFact;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -59,21 +69,19 @@ public class Review {
         setFunFact(funFact);
     }
 
-    public Review(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, Product product, Rating rating, User user) {
+    public Review(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, Rating rating, User user) {
         this(idReview, version, approvalStatus, reviewText, publishingDate, funFact);
 
         setUpVote(upVote);
         setDownVote(downVote);
         setReport(report);
-        setProduct(product);
         setRating(rating);
         setUser(user);
 
     }
 
-    public Review(final String reviewText, LocalDate publishingDate, Product product, String funFact, Rating rating, User user) {
+    public Review(final String reviewText, LocalDate publishingDate, String funFact, Rating rating, User user) {
         setReviewText(reviewText);
-        setProduct(product);
         setPublishingDate(publishingDate);
         setApprovalStatus("pending");
         setFunFact(funFact);
@@ -143,14 +151,6 @@ public class Review {
 
     public void setFunFact(String funFact) {
         this.funFact = funFact;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Product getProduct() {
-        return product;
     }
 
     public User getUser() {

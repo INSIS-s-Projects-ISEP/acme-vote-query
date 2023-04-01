@@ -2,19 +2,18 @@ package com.isep.acme.services;
 
 import java.util.List;
 
-import com.isep.acme.model.*;
+import com.isep.acme.model.CreateReviewDTO;
+import com.isep.acme.model.Review;
+import com.isep.acme.model.ReviewDTO;
+import com.isep.acme.model.VoteReviewDTO;
 
 public interface ReviewService {
 
     Iterable<Review> getAll();
 
-    List<ReviewDTO> getReviewsOfProduct(String sku, String status);
-
-    ReviewDTO create(CreateReviewDTO createReviewDTO, String sku);
+    ReviewDTO create(CreateReviewDTO createReviewDTO);
 
     boolean addVoteToReview(Long reviewID, VoteReviewDTO voteReviewDTO);
-
-    Double getWeightedAverage(Product product);
 
     Boolean DeleteReview(Long reviewId);
 
