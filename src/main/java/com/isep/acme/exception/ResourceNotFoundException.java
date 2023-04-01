@@ -1,4 +1,4 @@
-package com.isep.acme.api.controller;
+package com.isep.acme.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 
