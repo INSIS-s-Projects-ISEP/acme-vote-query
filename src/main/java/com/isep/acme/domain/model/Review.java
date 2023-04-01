@@ -1,14 +1,14 @@
 package com.isep.acme.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,13 +24,8 @@ public class Review {
     @Column(nullable = false)
     private String approvalStatus = "pending";
 
-    @ElementCollection
-    @Column(nullable = true)
-    private List<Vote> upVote = new ArrayList<>();
-
-    @ElementCollection
-    @Column(nullable = true)
-    private List<Vote> downVote = new ArrayList<>();
+    @OneToMany(mappedBy = "review")
+    private Set<Vote> votes = new HashSet<>();
 
     public Boolean setApprovalStatus(String approvalStatus) {
 
@@ -44,27 +39,12 @@ public class Review {
         return false;
     }
 
-    public boolean addUpVote(Vote upVote) {
+    public boolean addVote(Vote upVote) {
 
-        if( !this.approvalStatus.equals("approved"))
+        if(!approvalStatus.equals("approved")){
             return false;
-
-        if(!this.upVote.contains(upVote)){
-            this.upVote.add(upVote);
-            return true;
         }
-        return false;
-    }
 
-    public boolean addDownVote(Vote downVote) {
-
-        if( !this.approvalStatus.equals( "approved") )
-            return false;
-
-        if(!this.downVote.contains(downVote)){
-            this.downVote.add(downVote);
-            return true;
-        }
-        return false;
+        return votes.add(upVote);
     }
 }

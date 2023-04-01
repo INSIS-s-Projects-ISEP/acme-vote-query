@@ -8,8 +8,8 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.isep.acme.api.controller.ResourceNotFoundException;
 import com.isep.acme.domain.model.User;
+import com.isep.acme.exception.ResourceNotFoundException;
 
 import java.util.Optional;
 

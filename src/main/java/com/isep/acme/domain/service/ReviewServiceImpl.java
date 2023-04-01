@@ -4,11 +4,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.isep.acme.api.controller.ResourceNotFoundException;
 import com.isep.acme.domain.model.Review;
-import com.isep.acme.domain.model.Vote;
 import com.isep.acme.domain.repository.ReviewRepository;
-import com.isep.acme.dto.VoteReviewDTO;
+import com.isep.acme.exception.ResourceNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -21,31 +19,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review create(Review review) {
         return reviewRepository.save(review);
-    }
-
-    @Override
-    public boolean addVoteToReview(Long reviewID, VoteReviewDTO voteReviewDTO) {
-
-        Optional<Review> review = reviewRepository.findById(reviewID);
-        if(review.isEmpty()){
-            return false;
-        }
-
-        Vote vote = new Vote(voteReviewDTO.getVote(), voteReviewDTO.getUserID());
-        if(voteReviewDTO.getVote().equalsIgnoreCase("upVote")){
-            boolean added = review.get().addUpVote(vote);
-            if(added){
-                Review reviewUpdated = this.reviewRepository.save(review.get());
-                return reviewUpdated != null;
-            }
-        } else if (voteReviewDTO.getVote().equalsIgnoreCase("downVote")) {
-            boolean added = review.get().addDownVote(vote);
-            if (added) {
-                Review reviewUpdated = this.reviewRepository.save(review.get());
-                return reviewUpdated != null;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -65,20 +38,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Boolean deleteReview(Long reviewId)  {
-
-        Optional<Review> rev = reviewRepository.findById(reviewId);
-        if (rev.isEmpty()){
-            return null;
-        }
-
-        Review review = rev.get();
-        if (review.getUpVote().isEmpty() && review.getDownVote().isEmpty()) {
-            reviewRepository.delete(review);
-            return true;
-        }
-
-        return false;
+    public void deleteReview(Long reviewId)  {
+        reviewRepository.deleteById(reviewId);
     }
 
 }
