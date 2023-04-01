@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.isep.acme.domain.model.Review;
+import com.isep.acme.domain.model.Vote;
 import com.isep.acme.domain.repository.ReviewRepository;
 import com.isep.acme.exception.ResourceNotFoundException;
 
@@ -14,6 +15,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
+    private final VoteService voteService;
     private final ReviewRepository reviewRepository;
 
     @Override
@@ -35,6 +37,20 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         return reviewRepository.save(r.get());
+    }
+
+    @Override
+    public void addVoteToReview(Long reviewId, Vote vote) {
+
+        Optional<Review> optReview = reviewRepository.findById(reviewId);
+        if(optReview.isEmpty()){
+            throw new ResourceNotFoundException(Review.class, reviewId);
+        }
+
+        Review review = optReview.get();
+        review.addVote(vote);
+
+        voteService.create(vote);
     }
 
     @Override

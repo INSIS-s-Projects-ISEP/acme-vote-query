@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import com.isep.acme.domain.model.enumerate.VoteType;
 
@@ -27,9 +28,10 @@ public class Vote {
     private Long voteId;
 
     @ManyToOne
-    @JoinColumn(name = "fk_review")
+    @JoinColumn(name = "fk_review", nullable = false)
     private Review review;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private VoteType voteType;
 

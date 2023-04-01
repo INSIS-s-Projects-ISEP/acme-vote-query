@@ -19,7 +19,7 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long idReview;
+    private Long reviewId;
 
     @Column(nullable = false)
     private String approvalStatus = "pending";
@@ -39,12 +39,12 @@ public class Review {
         return false;
     }
 
-    public boolean addVote(Vote upVote) {
+    public void addVote(Vote upVote) {
 
         if(!approvalStatus.equals("approved")){
-            return false;
+            throw new RuntimeException("Review is not approved");
         }
 
-        return votes.add(upVote);
+        votes.add(upVote);
     }
 }
