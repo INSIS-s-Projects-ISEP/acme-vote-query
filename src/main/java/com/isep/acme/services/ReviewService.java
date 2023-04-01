@@ -1,25 +1,16 @@
 package com.isep.acme.services;
 
-import java.util.List;
-
-import com.isep.acme.model.CreateReviewDTO;
 import com.isep.acme.model.Review;
-import com.isep.acme.model.ReviewDTO;
 import com.isep.acme.model.VoteReviewDTO;
 
 public interface ReviewService {
 
-    Iterable<Review> getAll();
+    Review create(Review review);
 
-    ReviewDTO create(CreateReviewDTO createReviewDTO);
+    boolean addVoteToReview(Long reviewId, VoteReviewDTO voteReviewDTO);
 
-    boolean addVoteToReview(Long reviewID, VoteReviewDTO voteReviewDTO);
+    Review moderateReview(Long reviewId, String approved);
 
-    Boolean DeleteReview(Long reviewId);
+    Boolean deleteReview(Long reviewId);
 
-    List<ReviewDTO> findPendingReview();
-
-    ReviewDTO moderateReview(Long reviewID, String approved);
-
-    List<ReviewDTO> findReviewsByUser(Long userID);
 }

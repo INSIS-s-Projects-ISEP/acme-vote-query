@@ -1,103 +1,36 @@
 package com.isep.acme.model;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Version;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter @Setter
 public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idReview;
 
-    @Version
-    private long version;
-
     @Column(nullable = false)
-    private String approvalStatus;
-
-    @Column(nullable = false)
-    private String reviewText;
+    private String approvalStatus = "pending";
 
     @ElementCollection
     @Column(nullable = true)
-    private List<Vote> upVote;
+    private List<Vote> upVote = new ArrayList<>();
 
     @ElementCollection
     @Column(nullable = true)
-    private List<Vote> downVote;
-
-    @Column(nullable = true)
-    private String report;
-
-    @Column(nullable = false)
-    private LocalDate publishingDate;
-
-    @Column(nullable = false)
-    private String funFact;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
-    private Rating rating;
-
-    protected Review(){}
-
-    public Review(final Long idReview, final long version, final String approvalStatus, final String reviewText, final LocalDate publishingDate, final String funFact) {
-        this.idReview = Objects.requireNonNull(idReview);
-        this.version = Objects.requireNonNull(version);
-        setApprovalStatus(approvalStatus);
-        setReviewText(reviewText);
-        setPublishingDate(publishingDate);
-        setFunFact(funFact);
-    }
-
-    public Review(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, Rating rating, User user) {
-        this(idReview, version, approvalStatus, reviewText, publishingDate, funFact);
-
-        setUpVote(upVote);
-        setDownVote(downVote);
-        setReport(report);
-        setRating(rating);
-        setUser(user);
-
-    }
-
-    public Review(final String reviewText, LocalDate publishingDate, String funFact, Rating rating, User user) {
-        setReviewText(reviewText);
-        setPublishingDate(publishingDate);
-        setApprovalStatus("pending");
-        setFunFact(funFact);
-        setRating(rating);
-        setUser(user);
-        this.upVote = new ArrayList<>();
-        this.downVote = new ArrayList<>();
-    }
-
-    public Long getIdReview() {
-        return idReview;
-    }
-
-    public String getApprovalStatus() {
-        return approvalStatus;
-    }
+    private List<Vote> downVote = new ArrayList<>();
 
     public Boolean setApprovalStatus(String approvalStatus) {
 
@@ -109,83 +42,6 @@ public class Review {
             return true;
         }
         return false;
-    }
-
-    public String getReviewText() {
-        return reviewText;
-    }
-
-    public void setReviewText(String reviewText) {
-        if (reviewText == null || reviewText.isBlank()) {
-            throw new IllegalArgumentException("Review Text is a mandatory attribute of Review.");
-        }
-        if (reviewText.length() > 2048) {
-            throw new IllegalArgumentException("Review Text must not be greater than 2048 characters.");
-        }
-
-        this.reviewText = reviewText;
-    }
-
-    public void setReport(String report) {
-        if (report.length() > 2048) {
-            throw new IllegalArgumentException("Report must not be greater than 2048 characters.");
-        }
-        this.report = report;
-    }
-
-    public LocalDate getPublishingDate() {
-        return publishingDate;
-    }
-
-    public void setPublishingDate(LocalDate publishingDate) {
-        this.publishingDate = publishingDate;
-    }
-
-    public long getVersion() {
-        return version;
-    }
-
-    public String getFunFact() {
-        return funFact;
-    }
-
-    public void setFunFact(String funFact) {
-        this.funFact = funFact;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Rating getRating() {
-        if(rating == null) {
-            return new Rating(0.0);
-        }
-        return rating;
-    }
-
-    public void setRating(Rating rating) {
-        this.rating = rating;
-    }
-
-    public List<Vote> getUpVote() {
-        return upVote;
-    }
-
-    public void setUpVote(List<Vote> upVote) {
-        this.upVote = upVote;
-    }
-
-    public List<Vote> getDownVote() {
-        return downVote;
-    }
-
-    public void setDownVote(List<Vote> downVote) {
-        this.downVote = downVote;
     }
 
     public boolean addUpVote(Vote upVote) {
