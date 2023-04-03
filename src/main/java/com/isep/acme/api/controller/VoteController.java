@@ -22,10 +22,4 @@ public class VoteController {
     private final ReviewService reviewService;
     private final VoteMapper voteMapper;
     
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody VoteRequest voteRequest){
-        Vote vote = voteMapper.toEntity(voteRequest);
-        reviewService.addVoteToReview(voteRequest.getReviewId(), vote);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
 }
