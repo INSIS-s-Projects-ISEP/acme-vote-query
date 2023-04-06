@@ -1,4 +1,4 @@
-package com.isep.acme.domain.service;
+package com.isep.acme.domain.service.impl;
 
 import java.util.Optional;
 
@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.isep.acme.domain.model.Review;
 import com.isep.acme.domain.model.Vote;
+import com.isep.acme.domain.model.enumerate.ApprovalStatus;
 import com.isep.acme.domain.repository.ReviewRepository;
+import com.isep.acme.domain.service.ReviewService;
+import com.isep.acme.domain.service.VoteService;
 import com.isep.acme.exception.ResourceNotFoundException;
 
 import lombok.AllArgsConstructor;
@@ -19,29 +22,22 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public Review create(Review review) {
+    public Review save(Review review){
         return reviewRepository.save(review);
     }
 
     @Override
-    public Review moderateReview(Long reviewID, String approved){
-
-        Optional<Review> r = reviewRepository.findById(reviewID);
-        if(r.isEmpty()){
+    public Review moderateReview(Long reviewID, ApprovalStatus approvalStatus){
+        Review review = reviewRepository.findById(reviewID).orElseThrow(() -> {
             throw new ResourceNotFoundException("Review not found");
-        }
+        });
 
-        Boolean ap = r.get().setApprovalStatus(approved);
-        if(!ap) {
-            throw new IllegalArgumentException("Invalid status value");
-        }
-
-        return reviewRepository.save(r.get());
+        review.setApprovalStatus(approvalStatus);
+        return reviewRepository.save(review);
     }
 
     @Override
     public void addVoteToReview(Long reviewId, Vote vote) {
-
         Optional<Review> optReview = reviewRepository.findById(reviewId);
         if(optReview.isEmpty()){
             throw new ResourceNotFoundException(Review.class, reviewId);
@@ -49,12 +45,11 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review review = optReview.get();
         review.addVote(vote);
-
-        voteService.create(vote);
+        voteService.save(vote);
     }
 
     @Override
-    public void deleteReview(Long reviewId)  {
+    public void deleteReview(Long reviewId){
         reviewRepository.deleteById(reviewId);
     }
 
