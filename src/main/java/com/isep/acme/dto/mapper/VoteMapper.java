@@ -1,6 +1,7 @@
 package com.isep.acme.dto.mapper;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ public class VoteMapper {
     private final ReviewRepository reviewRepository;
 
     public Vote toEntity(VoteRequest voteRequest){
-        Long reviewId = voteRequest.getReviewId();
+        UUID reviewId = voteRequest.getReviewId();
         Optional<Review> optReview = reviewRepository.findById(reviewId);
         
         return new Vote(null,
@@ -30,7 +31,7 @@ public class VoteMapper {
     }
 
     public Vote toEntity(VoteMessage voteMessage){
-        Long reviewId = voteMessage.getReviewId();
+        UUID reviewId = voteMessage.getReviewId();
         Optional<Review> optReview = reviewRepository.findById(reviewId);
 
         return new Vote(

@@ -1,6 +1,7 @@
 package com.isep.acme.messaging;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -49,7 +50,7 @@ public class ReviewConsumer {
     }
 
     @RabbitListener(queues = "#{reviewDeletedQueue.name}", ackMode = "MANUAL")
-    public void reviewDeleted(Long reviewId, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException{
+    public void reviewDeleted(UUID reviewId, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException{
         
         log.info("Review received: " + reviewId);
         reviewService.deleteReview(reviewId);

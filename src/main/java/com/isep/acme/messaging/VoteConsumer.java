@@ -1,6 +1,7 @@
 package com.isep.acme.messaging;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -45,12 +46,11 @@ public class VoteConsumer {
     }
 
     @RabbitListener(queues = "#{voteDeletedQueue.name}", ackMode = "MANUAL")
-    public void voteDeleted(VoteMessage voteMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException{
+    public void voteDeleted(UUID voteId, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException{
 
-        Vote vote = voteMapper.toEntity(voteMessage);
-        log.info("Vote received: " + vote.getVoteId());
-        voteService.deleteById(vote.getVoteId());
+        log.info("Vote received: " + voteId);
+        voteService.deleteById(voteId);
+        log.info("Vote deleted: " + voteId);
         channel.basicAck(tag, false);
-        log.info("Vote deleted: " + vote.getVoteId());
     }
 }
