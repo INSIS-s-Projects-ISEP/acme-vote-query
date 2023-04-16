@@ -1,9 +1,11 @@
 package com.isep.acme.domain.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.isep.acme.domain.model.Review;
 import com.isep.acme.domain.model.Vote;
 import com.isep.acme.domain.model.enumerate.VoteType;
 import com.isep.acme.domain.repository.VoteRepository;
@@ -30,6 +32,16 @@ public class VoteServiceImpl implements VoteService {
 
     public void deleteById(UUID voteId){
         voteRepository.deleteById(voteId);
+    }
+
+    @Override
+    public List<Vote> findAll() {
+        return voteRepository.findAll();
+    }
+
+    @Override
+    public List<Vote> findByReview(Review review) {
+        return voteRepository.findByReview(review);
     }
     
 }

@@ -44,6 +44,7 @@ public class RabbitmqConfig {
         return event -> rabbitAdmin.initialize();
     }
 
+    // Vote Created
     @Bean
     public FanoutExchange voteCreatedExchange() {
         return new FanoutExchange("vote.vote-created");
@@ -59,12 +60,12 @@ public class RabbitmqConfig {
         return BindingBuilder.bind(voteCreatedQueue).to(voteCreatedExchange);
     }
 
-    
+    // Vote Updated
     @Bean
     public FanoutExchange voteUpdatedExchange() {
         return new FanoutExchange("vote.vote-updated");
     }
-    
+
     @Bean
     public Queue voteUpdatedQueue(String intanceId) {
         return new Queue("vote.vote-updated.vote-query." + intanceId, true, true, true);
@@ -75,12 +76,13 @@ public class RabbitmqConfig {
             Queue voteUpdatedQueue) {
         return BindingBuilder.bind(voteUpdatedQueue).to(voteUpdatedExchange);
     }
-    
+
+    // Vote Deleted
     @Bean
     public FanoutExchange voteDeletedExchange() {
         return new FanoutExchange("vote.vote-deleted");
     }
-    
+
     @Bean
     public Queue voteDeletedQueue(String intanceId) {
         return new Queue("vote.vote-deleted.vote-query." + intanceId, true, true, true);
@@ -91,6 +93,7 @@ public class RabbitmqConfig {
         return new FanoutExchange("review.review-created");
     }
 
+    // Review Created
     @Bean
     public Queue reviewCreatedQueue(String instanceId) {
         return new Queue("review.review-created.vote-query." + instanceId, true, true, true);
@@ -101,11 +104,12 @@ public class RabbitmqConfig {
         return BindingBuilder.bind(reviewCreatedQueue).to(reviewCreatedExchange);
     }
 
+    // Review Updated
     @Bean
     public FanoutExchange reviewUpdatedExchange() {
         return new FanoutExchange("review.review-updated");
     }
-    
+
     @Bean
     public Queue reviewUpdatedQueue(String intanceId) {
         return new Queue("review.review-updated.vote-query." + intanceId, true, true, true);
@@ -117,11 +121,12 @@ public class RabbitmqConfig {
         return BindingBuilder.bind(reviewUpdatedQueue).to(reviewUpdatedExchange);
     }
 
+    // Review Deleted
     @Bean
     public FanoutExchange reviewDeletedExchange() {
         return new FanoutExchange("review.review-deleted");
     }
-    
+
     @Bean
     public Queue reviewDeletedQueue(String intanceId) {
         return new Queue("review.review-deleted.vote-query." + intanceId, true, true, true);
@@ -143,5 +148,18 @@ public class RabbitmqConfig {
                 return message;
             }
         };
+    }
+
+    // Bootstrapper
+    // Review
+    @Bean
+    public FanoutExchange rpcReviewExchange(){
+        return new FanoutExchange("rpc.review.vote-query-bootstrapper");
+    }
+
+    // Vote
+    @Bean
+    public FanoutExchange rpcVoteExchange(){
+        return new FanoutExchange("rpc.vote.vote-query-bootstrapper");
     }
 }
